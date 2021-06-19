@@ -34,6 +34,9 @@
             <c:forEach var="user" items="${listaUsuarios}">
               <tr>
                 <td>
+                  <img src="${user.foto}" alt="" />
+                </td>
+                <td>
                   <c:out value="${user.nome}" />
                 </td>
                 <td>

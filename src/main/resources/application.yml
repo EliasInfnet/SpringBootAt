@@ -1,0 +1,5 @@
+amazonProperties: 
+  endpointUrl: https://s3.sa-east-1.amazonaws.com/ 
+  accessKey: AKIA5SDCTLMNYJXZRIV2
+  secretKey: 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
+  bucketName: dr4-s3-bucket1

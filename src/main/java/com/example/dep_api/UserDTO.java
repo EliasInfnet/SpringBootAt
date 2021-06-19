@@ -1,18 +1,8 @@
 package com.example.dep_api;
 
-import javax.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
-public class User {
-
-    @JsonIgnoreProperties
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class UserDTO {
 
     private String nome;
     private String email;
@@ -21,10 +11,21 @@ public class User {
     private String logradouro;
     private String bairro;
     private String localidade;
-    private String foto;
+    private MultipartFile foto;
 
-    public User(String nome, String email, String telefone, String cep, String logradouro, String bairro,
-            String localidade, String foto) {
+    public UserDTO(String nome, String email, String telefone, String cep, String logradouro, String bairro,
+            String localidade) {
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.cep = cep;
+        this.logradouro = logradouro;
+        this.bairro = bairro;
+        this.localidade = localidade;
+    }
+
+    public UserDTO(String nome, String email, String telefone, String cep, String logradouro, String bairro,
+            String localidade, MultipartFile foto) {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
@@ -35,44 +36,7 @@ public class User {
         this.foto = foto;
     }
 
-    public User(Long id, String nome, String email, String telefone, String cep, String logradouro, String bairro,
-            String localidade, String foto) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.cep = cep;
-        this.logradouro = logradouro;
-        this.bairro = bairro;
-        this.localidade = localidade;
-        this.foto = foto;
-    }
-
-    public String getFoto() {
-        return foto;
-    }
-
-    public void setFoto(String foto) {
-        this.foto = foto;
-    }
-
-    public User() {
-    }
-
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public UserDTO() {
     }
 
     public String getNome() {
@@ -99,6 +63,14 @@ public class User {
         this.telefone = telefone;
     }
 
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
     public String getLogradouro() {
         return logradouro;
     }
@@ -121,6 +93,14 @@ public class User {
 
     public void setLocalidade(String localidade) {
         this.localidade = localidade;
+    }
+
+    public MultipartFile getFoto() {
+        return foto;
+    }
+
+    public void setFoto(MultipartFile foto) {
+        this.foto = foto;
     }
 
 }

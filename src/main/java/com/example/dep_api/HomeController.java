@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.dep_api.repository.UserRepository;
+import com.example.dep_api.service.AmazonClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,12 +15,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @SpringBootApplication
 public class HomeController {
+
+    @Autowired
+    AmazonClient amazonClient;
 
     @Autowired
     ViaCepService viaCepService;
@@ -32,7 +35,7 @@ public class HomeController {
 
         Endereco endereco = new Endereco();
         Endereco enderecoAux = new Endereco();
-        User user = new User();
+        UserDTO user = new UserDTO();
 
         PalavraChave pv = new PalavraChave();
         PalavraChave pv2 = new PalavraChave();
@@ -49,12 +52,13 @@ public class HomeController {
     }
 
     @PostMapping("/")
-    public String submitForm(@ModelAttribute("user") User user, ModelMap model) {
+    public String submitForm(@ModelAttribute("user") UserDTO userDTO, ModelMap model) {
 
-        User user1 = new User(user.getNome(), user.getEmail(), user.getTelefone(),
-                viaCepService.buscaEnderecoPor(user.getCep()).getLogradouro(),
-                viaCepService.buscaEnderecoPor(user.getCep()).getBairro(),
-                viaCepService.buscaEnderecoPor(user.getCep()).getLocalidade(), user.getCep());
+        User user1 = new User(userDTO.getNome(), userDTO.getEmail(), userDTO.getTelefone(), userDTO.getCep(),
+                viaCepService.buscaEnderecoPor(userDTO.getCep()).getLogradouro(),
+                viaCepService.buscaEnderecoPor(userDTO.getCep()).getBairro(),
+                viaCepService.buscaEnderecoPor(userDTO.getCep()).getLocalidade(),
+                amazonClient.uploadFile(userDTO.getFoto()));
 
         model.addAttribute("user", user1);
         userRepository.save(user1);
@@ -74,16 +78,25 @@ public class HomeController {
     public String listaEdit(@PathVariable("id") Long id, Model model) {
 
         User user2 = userRepository.findById(id).get();
-        model.addAttribute("userEdicao", user2);
+        model.addAttribute("userAux", user2);
+
+        UserDTO userDTO = new UserDTO();
+
+        model.addAttribute("userEdicao", userDTO);
         return "edicao";
     }
 
-    @PostMapping("/editar")
-    public String submitFormEdit(@ModelAttribute("userEdicao") User user, ModelMap model) {
-        System.out.println(user.getNome());
-        System.out.println(user.getId());
-        System.out.println(user.getLogradouro());
-        userRepository.save(user);
+    @PostMapping("/editar/{id}")
+    public String submitFormEdit(@PathVariable("id") Long id, @ModelAttribute("userEdicao") UserDTO userDTO,
+            ModelMap model) {
+
+        User user1 = new User(id, userDTO.getNome(), userDTO.getEmail(), userDTO.getTelefone(), userDTO.getCep(),
+                viaCepService.buscaEnderecoPor(userDTO.getCep()).getLogradouro(),
+                viaCepService.buscaEnderecoPor(userDTO.getCep()).getBairro(),
+                viaCepService.buscaEnderecoPor(userDTO.getCep()).getLocalidade(),
+                amazonClient.uploadFile(userDTO.getFoto()));
+
+        userRepository.save(user1);
         return "edicao";
     }
 

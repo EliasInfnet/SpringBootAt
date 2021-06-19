@@ -19,24 +19,30 @@
 
             <body>
                 <div class="row justify-content-md-center">
-                    <form:form action="/editar" method="POST" modelAttribute="userEdicao">
+                    <form:form action="/editar/${userAux.id}" method="post" modelAttribute="userEdicao"
+                        enctype="multipart/form-data">
 
-                        <form:input hidden="true" path="id" class="form-control" />
                         <h5>Nome</h5>
-                        <form:input path="nome" class="form-control" />
+                        <form:input path="nome" class="form-control" value="${userAux.nome}" />
                         <h5>Email</h5>
-                        <form:input path="email" class="form-control" />
+                        <form:input path="email" class="form-control" value="${userAux.email}" />
                         <h5>Telefone</h5>
-                        <form:input path="telefone" class="form-control" />
+                        <form:input path="telefone" class="form-control" value="${userAux.telefone}" />
                         <h5>Cep</h5>
-                        <form:input path="cep" class="form-control" />
+                        <form:input path="cep" class="form-control" value="${userAux.cep}" />
                         <h5>Logradouro</h5>
-                        <form:input path="logradouro" class="form-control" />
+                        <form:input path="logradouro" class="form-control" value="${userAux.logradouro}" />
                         <h5>Bairro</h5>
-                        <form:input path="bairro" class="form-control" />
+                        <form:input path="bairro" class="form-control" value="${userAux.bairro}" />
                         <h5>Localidade</h5>
-                        <form:input path="localidade" class="form-control" />
+                        <form:input path="localidade" class="form-control" value="${userAux.localidade}" />
                         <br>
+                        <tr>
+                            <td>
+                                <form:label path="foto">Select a file to upload</form:label>
+                            </td>
+                            <td><input type="file" name="foto" /></td>
+                        </tr>
                         <form:button class="btn btn-outline-success">Salvar</form:button>
                     </form:form>
                     <br>
